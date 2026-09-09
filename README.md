@@ -25,7 +25,7 @@ Interactive geometry demonstrations based on "Exploring Mathematical Problem-Sol
 - Pure ruler & compass construction (GeoGebra commands)
 - Equal ratio construction (x:y=4:3)
 - LaTeX formatted labels
-- Draggable moving points for exploring geometric规律
+- Draggable moving points for exploring geometric patterns
 - Natural coherent description in info panel
 - Dynamic moving points display in footer
 
