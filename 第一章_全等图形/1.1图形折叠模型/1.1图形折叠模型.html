@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.1 图形折叠模型</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    color: #333;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 18px 24px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .header h1 { font-size: 22px; margin: 0; font-weight: 700; }
+  .canvas-wrapper {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+  }
+  #ggb-element {
+    width: 100%;
+    height: 70vh;
+    min-height: 400px;
+    max-height: 700px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  /* 手机端响应式适配 */
+  @media (max-width: 768px) {
+    .container { padding: 8px; }
+    .header { padding: 14px 18px; border-radius: 10px; margin-bottom: 12px; }
+    .header h1 { font-size: 18px; }
+    .canvas-wrapper { padding: 6px; border-radius: 10px; margin-bottom: 12px; }
+    #ggb-element { height: 62vh; min-height: 380px; border-radius: 6px; }
+    .info { padding: 16px; border-radius: 10px; }
+    .info h2 { font-size: 16px; margin-bottom: 10px; }
+    .info p { font-size: 14px; line-height: 1.7; }
+    .construction-toggle { padding: 11px 14px; font-size: 13px; border-radius: 10px; }
+    .construction-content { padding: 16px; }
+    .construction-steps { font-size: 13px; line-height: 1.8; }
+    .footer { padding: 12px; font-size: 12px; }
+  }
+  @media (max-width: 480px) {
+    #ggb-element { height: 58vh; min-height: 340px; }
+    .header h1 { font-size: 16px; }
+    .header { padding: 12px 16px; }
+  }
+  .info {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .info h2 { font-size: 20px; margin-bottom: 15px; color: #667eea; }
+  .info p { line-height: 1.8; margin-bottom: 10px; }
+  .info ul { padding-left: 20px; line-height: 1.8; }
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>1.1 图形折叠模型</h1>
+  </div>
+  <div class="canvas-wrapper">
+    <div id="ggb-element"></div>
+  </div>
+
+  <div class="construction-panel">
+    <button class="construction-toggle" onclick="toggleConstruction()">
+      📐 查看尺规作图流程（8步）
+    </button>
+    <div class="construction-content" id="constructionContent">
+      <h3>🔧 纯尺规作图流程</h3>
+      <p class="construction-note">本图全部由几何约束（圆/交点/垂线/旋转/反射/角平分线等）生成，零近似误差，严格精确。</p>
+      <ol class="construction-steps">
+<li>初始点 A、B 定布局（AB 水平，长度10）</li>
+<li>圆A半径6 + 圆B半径8，上交点得 C（AC=6, BC=8, AB=10，6-8-10勾股数保证∠C=90°）</li>
+<li>D = Point[Segment[A,B]]（AB上的动点，可拖动改变折叠位置）</li>
+<li>E = Point[Segment[B,C]]（BC上的动点，可拖动改变折叠位置）</li>
+<li>连接三角形三边 AB、AC、BC</li>
+<li>连接折痕 DE</li>
+<li>B' = Reflect[B, Line[D,E]]（折叠，反射变换保证 △BDE≅△B'DE）</li>
+<li>连接折叠后的边 DB'、EB'</li>
+      </ol>
+    </div>
+  </div>
+  <style>
+    .construction-panel { margin-bottom: 20px; }
+    .construction-toggle {
+      width: 100%;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: opacity 0.2s;
+    }
+    .construction-toggle:hover { opacity: 0.9; }
+    .construction-content {
+      display: none;
+      background: white;
+      border-radius: 0 0 12px 12px;
+      padding: 25px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      margin-top: -8px;
+    }
+    .construction-content.show { display: block; }
+    .construction-content h3 { font-size: 18px; color: #667eea; margin-bottom: 10px; }
+    .construction-note {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: #f0f4ff;
+      border-radius: 8px;
+      border-left: 3px solid #667eea;
+    }
+    .construction-steps {
+      padding-left: 25px;
+      line-height: 2;
+      font-size: 14px;
+      color: #444;
+    }
+    .construction-steps li { margin-bottom: 6px; }
+  </style>
+  <script>
+    function toggleConstruction() {
+      var content = document.getElementById('constructionContent');
+      content.classList.toggle('show');
+    }
+  </script>
+
+  <div class="info">
+    <h2>模型说明</h2>
+    <p><strong>模型名称：</strong>1.1 图形折叠模型</p>
+    <p><strong>交互操作：</strong>拖动图中的动点，可以观察图形的动态变化，探索几何规律。</p>
+    <p><strong>核心思想：</strong>利用几何画板（GeoGebra）的动态演示功能，在变化的图形中探索恒定不变的几何规律。</p>
+  </div>
+  <div class="footer">
+    <p>Eucon 欧式尺规绘图 · 几何画板解题模型系列</p>
+  </div>
+</div>
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+<script>
+  var ggbApp = null;
+  // hide列表中的对象不修改可见性（保持隐藏，如辅助角angleBCA）
+  var hideSet = {"circleA_C":true,"circleB_C":true,"lineDE":true,"circleB_D0":true,"D0":true,"circleB_D1":true,"D1":true,"seg_D0D1":true,"circleB_E0":true,"E0":true,"circleB_E1":true,"E1":true,"seg_E0E1":true};
+
+  var params = {
+    "appName": "classic",
+    "width": "100%",
+    "height": "100%",
+    "showToolBar": false,
+    "showAlgebraInput": false,
+    "showMenuBar": false,
+    "showResetIcon": true,
+    "enableLabelDrags": false,
+    "enableShiftDragZoom": true,
+    "enableRightClick": false,
+    "showToolBarHelp": false,
+    "errorDialogsActive": false,
+    "useBrowserForJS": false,
+    "showZoomButtons": true,
+    "showAlgebraWindow": false,
+    "perspective": "G",
+    "ggbBase64": "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",
+    "appletOnLoad": function(api) {
+      ggbApp = api;
+      // 修复：GGB文件中segment的color alpha=0（完全透明），加载后强制设置颜色
+      // v0.3.5修复：只修复segment和angle，不碰ray/line（辅助线）；标签由GGB XML中的labelMode=0控制
+      // 兜底：labelStyle=2且caption为空的point（如Bp），设置caption为对象名，避免显示坐标值
+      function fixSegmentColors() {
+        try {
+          var allObjs = api.getAllObjectNames();
+          for (var i = 0; i < allObjs.length; i++) {
+            var obj = allObjs[i];
+            var otype = api.getObjectType(obj);
+            if (otype === "segment" || otype === "angle") {
+              // 跳过hide列表中的辅助对象（保持隐藏，如辅助角angleBCA）
+              if (hideSet[obj]) { continue; }
+              // 只修复segment和angle的可见性和颜色，不碰ray/line（辅助线）
+              api.setVisible(obj, true);
+              try { api.evalCommand("SetColor[" + obj + ", 0, 0, 0]"); } catch(e) {}
+              try { api.setLineThickness(obj, 5); } catch(e) {}
+              try { api.setLabelVisible(obj, false); } catch(e) {}
+            } else if (otype === "point") {
+              // 兜底：labelStyle不是2或caption为空的point，用原生命令设置labelStyle=2和caption
+              // GeoGebra加载ggbBase64时可能重置caption，labelMode=2自动降级为3（显示坐标值）
+              // 用原生命令SetLabelStyle和SetCaption，比JavaScript API更可靠
+              try {
+                var ls = api.getLabelStyle(obj);
+                var cap = api.getCaption(obj);
+                if (ls !== 2 || !cap || cap.trim() === '' || cap.trim() === obj) {
+                  // 用原生命令设置labelStyle=2
+                  api.evalCommand("SetLabelStyle[" + obj + ", 2]");
+                  // 设置caption为$对象名$（LaTeX格式），特殊处理Bp→B'
+                  var displayName = obj;
+                  if (obj.length > 1 && obj.charAt(obj.length-1) === 'p') {
+                    displayName = obj.substring(0, obj.length-1) + "'";
+                  }
+                  api.evalCommand("SetCaption[" + obj + ", \"$" + displayName + "$\"]");
+                  api.setLabelVisible(obj, true);
+                }
+              } catch(e) {}
+            }
+          }
+        } catch(e) {}
+      }
+      // 自动适应屏幕：遍历所有可见点计算边界框，设置**等比**坐标系
+      // v0.3.5修复：使用ZoomIn原生命令替代setCoordSystem，更可靠；确保图形居中
+      function fitToScreen() {
+        try {
+          var allObjs = api.getAllObjectNames();
+          var xmin = Infinity, xmax = -Infinity, ymin = Infinity, ymax = -Infinity;
+          var found = false;
+          for (var i = 0; i < allObjs.length; i++) {
+            var obj = allObjs[i];
+            try {
+              if (api.getObjectType(obj) === "point" && api.getVisible(obj)) {
+                var x = api.getXcoord(obj);
+                var y = api.getYcoord(obj);
+                if (isFinite(x) && isFinite(y)) {
+                  xmin = Math.min(xmin, x);
+                  xmax = Math.max(xmax, x);
+                  ymin = Math.min(ymin, y);
+                  ymax = Math.max(ymax, y);
+                  found = true;
+                }
+              }
+            } catch(e) {}
+          }
+          if (found) {
+            // 添加边距
+            var xRange = (xmax - xmin) || 1;
+            var yRange = (ymax - ymin) || 1;
+            var pad = Math.max(xRange, yRange) * 0.2;
+            xmin -= pad; xmax += pad;
+            ymin -= pad; ymax += pad;
+            xRange = xmax - xmin;
+            yRange = ymax - ymin;
+            // 获取容器实际CSS宽高
+            var container = document.getElementById('ggb-element');
+            var canvasW = container ? container.offsetWidth : 800;
+            var canvasH = container ? container.offsetHeight : 600;
+            var canvasRatio = canvasW / canvasH;
+            var graphRatio = xRange / yRange;
+            // 等比例调整：确保x/y单位长度相等，图形居中
+            if (graphRatio > canvasRatio) {
+              // 图形更宽，增加y范围，保持中心不变
+              var newYRange = xRange / canvasRatio;
+              var yCenter = (ymin + ymax) / 2;
+              ymin = yCenter - newYRange / 2;
+              ymax = yCenter + newYRange / 2;
+            } else {
+              // 图形更高，增加x范围，保持中心不变
+              var newXRange = yRange * canvasRatio;
+              var xCenter = (xmin + xmax) / 2;
+              xmin = xCenter - newXRange / 2;
+              xmax = xCenter + newXRange / 2;
+            }
+            // 使用ZoomIn原生命令设置视图（比setCoordSystem更可靠）
+            // 注意：不要同时调用SetAxesRatio，会覆盖ZoomIn的视图设置
+            try { api.evalCommand("ZoomIn[" + xmin + ", " + ymin + ", " + xmax + ", " + ymax + "]"); } catch(e) {}
+          }
+        } catch(e) {}
+      }
+      // 立即隐藏代数区+修复线段+适应屏幕
+      try { api.setPerspective("G"); } catch(e) {}
+      try { api.setAlgebraVisible(false); } catch(e) {}
+      fixSegmentColors();
+      fitToScreen();
+      // 多次延迟修复
+      setTimeout(function() {
+        try { api.setPerspective("G"); } catch(e) {}
+        try { api.setAlgebraVisible(false); } catch(e) {}
+        fixSegmentColors();
+        fitToScreen();
+      }, 500);
+      setTimeout(function() {
+        try { api.setPerspective("G"); } catch(e) {}
+        try { api.setAlgebraVisible(false); } catch(e) {}
+        fixSegmentColors();
+        fitToScreen();
+      }, 1500);
+      setTimeout(function() {
+        try { api.setPerspective("G"); } catch(e) {}
+        try { api.setAlgebraVisible(false); } catch(e) {}
+        fixSegmentColors();
+        fitToScreen();
+      }, 3000);
+    }
+  };
+  var applet = new GGBApplet(params, true);
+  applet.inject('ggb-element');
+</script>
+</body>
+</html>
