@@ -1,31 +1,35 @@
-# 几何画板解题模型 - GGB尺规作图交互演示
+# Geometry Model Demos - GGB Ruler & Compass Interactive Demonstrations
 
-基于《利用几何画板探究数学解题模型》（邵新虎 著）的GeoGebra尺规作图交互演示。
+Interactive geometry demonstrations based on "Exploring Mathematical Problem-Solving Models with Geometer's Sketchpad" by Shao Xinhu.
 
-## 第一章：全等图形解题模型
+## Chapter 1: Congruent Figure Problem-Solving Models
 
-### 模型列表
-1. **1.1 图形折叠模型** - 折叠前后的两个三角形全等
-2. **1.2 双垂线段模型** - 过等腰直角三角形锐角顶点向直角顶点直线作垂线
-3. **1.3 共点互余模型** - 公共顶点处的两个全等直角三角形
-4. **1.4 角平分线模型** - 角平分线上的点到角两边距离相等
-5. **1.5 角含半角模型** - 正方形中的45°角含半角
+### Models
+1. **1.1 Figure Folding Model** - Congruent triangles before and after folding
+2. **1.2 Double Perpendicular Segments Model** - Perpendiculars from acute vertices to line through right angle vertex
+3. **1.3 Co-point Complementary Angles Model** - Two congruent right triangles at a common vertex
+4. **1.4 Angle Bisector Model** - Points on angle bisector equidistant from both sides
+5. **1.5 Angle Contains Half-Angle Model** - 45° half-angle in square
 
-### 五合一演示页面
-- [第一章全等图形五合一 g-HTML](./第一章_全等图形/第一章_全等图形_五合一_g-HTML.html)
+### Five-in-One Demo Page
+- [Chapter 1 Five-in-One g-HTML](./chapter1/index.html)
 
-### 技术特点
-- 纯尺规作图（GeoGebra命令实现）
-- 等比例作图（x:y=4:3）
-- 标签LaTeX格式
-- 动点可拖动探索几何规律
-- 说明面板自然连贯写法
-- footer动态显示动点
+### Static Images
+- [1.1 Figure Folding](./chapter1/images/1.1.png)
+- [1.2 Double Perpendicular Segments](./chapter1/images/1.2.png)
+- [1.3 Co-point Complementary Angles](./chapter1/images/1.3.png)
+- [1.4 Angle Bisector](./chapter1/images/1.4.png)
+- [1.5 Angle Contains Half-Angle](./chapter1/images/1.5.png)
 
-## 原作者信息
-- 书名：《利用几何画板探究数学解题模型》
-- 作者：邵新虎
-- 用途：学习用途
+### Technical Features
+- Pure ruler & compass construction (GeoGebra commands)
+- Equal ratio construction (x:y=4:3)
+- LaTeX formatted labels
+- Draggable moving points for exploring geometric规律
+- Natural coherent description in info panel
+- Dynamic moving points display in footer
 
-## 工具
-- Eucon（欧式尺规绘图）- 基于GeoGebra网页版的尺规作图自动化工具
+## Original Author
+- Book: "Exploring Mathematical Problem-Solving Models with Geometer's Sketchpad"
+- Author: Shao Xinhu
+- Purpose: Educational use only
