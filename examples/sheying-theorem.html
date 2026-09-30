@@ -116,17 +116,12 @@ details p { margin-top:10px; font-size:14px; color:var(--muted); }
       api.setLabelStyle('C', 3); api.setLabelStyle('D', 3);
       api.registerUpdateListener(function(){
         if(!locked) return;
-        var txmin=-5, txmax=5, tymin=-1.25, tymax=6.25;
-        var vxmin=api.getViewXMin(), vxmax=api.getViewXMax();
-        var vymin=api.getViewYMin(), vymax=api.getViewYMax();
-        if(Math.abs(vxmin-txmin)>0.05 || Math.abs(vxmax-txmax)>0.05 ||
-           Math.abs(vymin-tymin)>0.05 || Math.abs(vymax-tymax)>0.05){
-          api.setCoordSystem(txmin, txmax, tymin, tymax);
-        }
         if(Math.abs(api.getXcoord('M'))>0.01) api.setCoords('M',0,0,true);
         if(Math.abs(api.getXcoord('A')+4)>0.01) api.setCoords('A',-4,0,true);
         if(Math.abs(api.getXcoord('B')-4)>0.01) api.setCoords('B',4,0,true);
       });
+      api.enableShiftDragZoom(false);
+      api.enableTouchZoom(false);
       setTimeout(function(){
         api.setCoordSystem(-5, 5, -1.25, 6.25);
         onSlider(parseFloat(document.getElementById('slider').value));
@@ -185,6 +180,8 @@ details p { margin-top:10px; font-size:14px; color:var(--muted); }
       if(!app) return;
       locked = !locked;
       ['M','A','B'].forEach(function(n){ app.setFixed(n, true); });
+      app.enableShiftDragZoom(!locked);
+      app.enableTouchZoom(!locked);
       if(locked){
         app.setCoords('M', 0, 0, true);
         app.setCoords('A', -4, 0, true);
